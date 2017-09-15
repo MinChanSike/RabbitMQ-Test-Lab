@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <title>MQTT.Js Receive</title>
+  <script src="js/mqtt.min.js"></script>
+</head>
+
+<body>
+  <button onclick="startConnect()">Start Connection</button>
+  <button onclick="stopConnect()">Stop Connection</button>
+
+  <script>
+    var client;
+    var brokerUrl = "http://127.0.0.1:15675/ws";
+    var topicName = "topic/mcs-test";
+    var opts = {
+        username: "YourUserName",
+        password: "YourPassword"
+    };
+
+    function startConnect() {
+      client = mqtt.connect(brokerUrl);  // (brokerUrl, opts) #if auth required
+      client.on('connect', () => {
+        console.log("CONNECT SUCCESS");
+        client.subscribe(topicName);
+      });
+
+      client.on("message", function (topic, payload) {
+        console.log("[x] Received: %s", payload.toString());
+      });
+    }
+
+    function stopConnect() {
+      client.end();
+      console.log("CONNECTION STOP");
+    }
+  </script>
+</body>
+
+</html>

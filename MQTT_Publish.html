@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>MQTT.Js Publish</title>
+    <script src="js/mqtt.min.js"></script>
+</head>
+
+<body>
+    <button onclick="publishMessage()">Publish Message</button>
+    <button onclick="stopPublish()">Stop Publish</button>
+
+    <script>
+        var message;
+        var mInterval;
+        var brokerUrl = "http://127.0.0.1:15675/ws";
+        var topicName = "topic/mcs-test";
+        var opts = {
+            username: "YourUserName",
+            password: "YourPassword"
+        };
+        var client = mqtt.connect(brokerUrl, opts); // (brokerUrl, opts) #if auth required
+
+        function publishMessage() {
+            mInterval = window.setInterval(function () {
+                message = Math.random().toString(36).substring(3) + "@" + new Date().toLocaleTimeString();
+                client.publish(topicName, message);
+                console.log("[x] Sent: %s", message);
+            }, 1000);
+        }
+
+        function stopPublish() {
+            if (mInterval != null) {
+                clearInterval(mInterval);
+                console.log("Stop publish");
+            }
+        }
+    </script>
+</body>
+
+</html>
